@@ -13,7 +13,9 @@ class App extends Component{
             <div>
                 <header>
                     <div className="row">
-                        <h1>MUSTANG ROUND UP SITE</h1>
+                        <div className="col-12">
+                            <h1 className="text-center">MUSTANG ROUND UP SITE</h1>
+                        </div>
                     </div>
                 </header>
             </div>
