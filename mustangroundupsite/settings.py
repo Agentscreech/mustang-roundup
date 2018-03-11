@@ -83,7 +83,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5433',
         'USER': 'user',
-        'PASSWORD': 'Postgresisneat!'
+        'PASSWORD': os.environ.get('PG_PASSWORD')
     }
 }
 
