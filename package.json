@@ -1,0 +1,46 @@
+{
+  "name": "mustang-roundup",
+  "version": "1.0.0",
+  "description": "Website for car show judging",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -p --progress --config webpack.config.js",
+    "dev-build": "webpack --progress -d --config webpack.config.js",
+    "watch": "webpack --progress -d --config webpack.config.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Agentscreech/mustang-roundup.git"
+  },
+  "author": "Travis Walentin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Agentscreech/mustang-roundup/issues"
+  },
+  "homepage": "https://github.com/Agentscreech/mustang-roundup#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "jquery": "^3.3.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "webpack": "^4.1.1",
+    "webpack-bundle-tracker": "^0.3.0"
+  },
+  "dependencies": {
+    "css-loader": "^0.28.10",
+    "npm": "^5.7.1",
+    "react-router-dom": "^4.2.2",
+    "style-loader": "^0.20.3",
+    "webpack-cli": "^2.0.11"
+  }
+}
