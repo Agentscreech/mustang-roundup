@@ -11,9 +11,7 @@ class HomePage extends Component {
         return (
             <div>
                 <h1>THIS IS THE HOMEPAGE</h1>
-                <div className="btn btn-primary">
-                    <Link to="/login">Login</Link>
-                </div>
+                    <Link to="/login"><span className="btn btn-primary">Login</span></Link>
             </div>
         )
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 var auth = require('./auth')
-
+import Catagory from './category'
 class Roundup extends Component {
     constructor(props) {
         super(props);
@@ -57,7 +57,9 @@ class Roundup extends Component {
             <div>
                 <h1>You are now logged in, {this.state.user.username}</h1>
                 <button onClick={this.logoutHandler}>Log out</button>
+            <Catagory name="Best in Show"/>
             </div>
+
         )
     }
 }
