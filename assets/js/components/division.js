@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 
-class Category extends Component {
+class Division extends Component {
     constructor(props) {
         super(props);
         this.state = {}
@@ -18,4 +18,4 @@ class Category extends Component {
 
 }
 
-export default Category
+export default Division

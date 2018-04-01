@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 var auth = require('./auth')
-import Catagory from './category'
+import Division from './components/division'
+import Sidebar from './components/sidebar'
+import {
+    Router,
+    Route,
+    Switch,
+} from 'react-router-dom'
+
 class Roundup extends Component {
     constructor(props) {
         super(props);
@@ -57,9 +64,21 @@ class Roundup extends Component {
             <div>
                 <h1>You are now logged in, {this.state.user.username}</h1>
                 <button onClick={this.logoutHandler}>Log out</button>
-            <Catagory name="Best in Show"/>
+                    <div className="row">
+                        <Sidebar />
+                        <Switch>
+                            <Route path="/roundup/BestinShow" render={(props) => (
+                                <Division name="Best in Show" />
+                            )}/>
+                            <Route path="/roundup/ConcourseTrailered" render={(props) => (
+                                <Division name="Concourse Trailered" />
+                            )} />                            
+
+                        </Switch>
+                    </div>
             </div>
 
+            
         )
     }
 }
