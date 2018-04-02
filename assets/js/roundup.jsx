@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 var auth = require('./auth')
 import Division from './components/division'
 import Sidebar from './components/sidebar'
+import Results from './components/results'
 import {
     Router,
     Route,
@@ -67,6 +68,9 @@ class Roundup extends Component {
                     <div className="row">
                         <Sidebar />
                         <Switch>
+                            <Route exact path="/roundup/" render={(props) => (
+                                <Results/>
+                            )}/>
                             <Route path="/roundup/BestinShow" render={(props) => (
                                 <Division name="Best in Show" />
                             )}/>
