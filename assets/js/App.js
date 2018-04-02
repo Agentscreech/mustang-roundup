@@ -27,9 +27,9 @@ class App extends Component{
                     <Switch>
                         <Route exact path="/" component={HomePage}/>
                         <Route path="/login" component={Login} />
-                        <Route path="/roundup" render={() => (
+                        <Route path="/roundup" render={(props) => (
                             auth.loggedIn() ? (
-                                <Roundup/>
+                                <Roundup {...props}/>
                             ) : (<Redirect to="/login" />)
                         )} />
                         <Route path='*' render={() => (<Redirect to="/"/>)}/>
