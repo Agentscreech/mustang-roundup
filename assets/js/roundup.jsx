@@ -110,8 +110,9 @@ class Roundup extends Component {
         let routes = this.buildRoutes(this.state.divisions)
         return (
             <div>
-                <h1>You are now logged in, {this.state.user.username}</h1>
-                <button onClick={this.logoutHandler}>Log out</button>
+                <h1 className="text-center">You are now logged in, {this.state.user.username}</h1>
+                <div><button onClick={this.logoutHandler}>Log out</button></div>
+                
                     <div className="row">
                         <Sidebar divisions={this.state.divisions}/>
                         <Switch>

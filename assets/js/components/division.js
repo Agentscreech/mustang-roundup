@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
 
 class Division extends Component {
     constructor(props) {
@@ -49,7 +51,7 @@ class Division extends Component {
         for (var i = 0; i < res.length; i++){
             let category = res[i].category
             if (category in temp){
-                temp[category].append({name:res[i].name, car:res[i].car})
+                temp[category].push({name:res[i].name, car:res[i].car, votes:res[i].votes})
             } else {
                 temp[category] = [{name:res[i].name, car:res[i].car, votes:res[i].votes}]
             }
@@ -59,37 +61,37 @@ class Division extends Component {
     }
 
     buildCategories(){
+        const columns = [{
+            Header: 'Name',
+            accessor: 'name'
+        }, {
+            Header: 'Car',
+            accessor: 'car',
+        },
+        {
+            Header: 'Votes',
+            accessor: 'votes'
+        }]
         let elements = []
         for (var category in this.state.categories){
-            let entries = this.buildEntries(this.state.categories[category])
             elements.push(
-                <div>
-                    {category}
-                    {entries}
-                </div>
+                <ReactTable
+                    data={this.state.categories[category]}
+                    columns={columns}
+                    showPagination = {false}
+                    defaultPageSize = {this.state.categories[category].length}
+                />
             )
         }
         return elements
     }
 
-    buildEntries(entries){
-        var temp = []
-        for (var i = 0; i < entries.length; i++){
-            temp.push(<span>
-                Name: {entries[i].name} Car: {entries[i].car} Votes: {entries[i].votes}
-            </span>)
-        }
-        return temp
-    }
-
 
     render(){
-        var category = this.state.entries[0].category
-        var name = this.state.entries[0].name
-        var car = this.state.entries[0].car
         var elements = this.buildCategories()
-        return <div>{this.props.name} Section
-                {elements}
+        return <div className="col">
+                    <h3 className="text-center">{this.props.name} Division</h3>
+                    {elements}
                 </div>
 
     }
