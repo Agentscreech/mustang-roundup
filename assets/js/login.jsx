@@ -30,15 +30,27 @@ class Login extends Component {
     render() {
         if (this.state.login_error){
             var error = <p>{this.state.login_error}</p>
+            setTimeout(() => {
+                this.setState({ login_error: null})
+            }, 3000);
         }
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <input type="text" placeholder="username" ref="username" />
-                    <input type="password" placeholder="password" ref="pass" />
-                    <input type="submit" />
-                </form>
-                {error}
+            <div className="row justify-content-center">
+                <div className="col-6">
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="username">Username:</label>
+                            <input className="form-control" type="text" placeholder="Enter Username" ref="username" />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Password:</label>
+                            <input className="form-control" type="password" placeholder="Enter Password" ref="pass" />
+                        </div>
+                            <input className="btn btn-primary" type="submit" />
+                        
+                    </form>
+                    {error}
+                </div>
             </div>
             
         )
