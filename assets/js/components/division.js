@@ -39,7 +39,7 @@ class Division extends Component {
         }
         fetch('/division/'+this.props.name, params).then(res => res.json())
             .then(function (res) {
-                console.log('division res: ', res)
+                // console.log('division res: ', res)
                 // this.setState({ entries: res })
                 this.findCategories(res)
             }.bind(this)
@@ -80,6 +80,7 @@ class Division extends Component {
                     columns={columns}
                     showPagination = {false}
                     defaultPageSize = {this.state.categories[category].length}
+                    key ={category}
                 />
             )
         }
