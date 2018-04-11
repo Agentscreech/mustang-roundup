@@ -20,7 +20,7 @@ module.exports = {
     },
 
     loggedIn: function () {
-        console.log(localStorage.token)
+        // console.log(localStorage.token)
         return localStorage.token
     },
 

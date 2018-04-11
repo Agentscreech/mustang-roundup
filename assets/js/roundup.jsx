@@ -12,7 +12,10 @@ import {
 class Roundup extends Component {
     constructor(props) {
         super(props);
-        this.state = { 'user': []}
+        this.state = { 
+            'user': [],
+            'divisions': []
+        }
         this.loadUserData = this.loadUserData.bind(this)
         this.logoutHandler = this.logoutHandler.bind(this)
     }
@@ -23,6 +26,11 @@ class Roundup extends Component {
 
     componentDidMount() {
         this.loadUserData()
+    }
+    
+    componentWillMount(){
+        this.getDivisions()
+
     }
 
     // contextTypes: {
@@ -54,30 +62,60 @@ class Roundup extends Component {
         fetch('/users/i/',params).then(res => res.json())
         .then(function(res)
             {
-                console.log('users response: ', res)
+                // console.log('users response: ', res)
                 this.setState({ user: res })
             }.bind(this)
         )  
     }
+    getDivisions(){
+        const params = {
+            'method': 'get',
+            'headers': new Headers({
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                'X-Requested-With': 'XMLHttpRequest',
+                'Authorization': 'Token ' + localStorage.token
+            }),
+            // 'body': JSON.stringify({
+            //     username: username,
+            //     password: pass
+            // })
+
+        }
+        fetch('/getDivisions/', params).then(res => res.json())
+            .then(function (res) {
+                // console.log('division res: ', res)
+                this.setState({ divisions: res })
+            }.bind(this)
+            )  
+    }
+
+    buildRoutes(divisions){
+        var routes = [<Route exact key="0" path="/roundup/" render={(props) => (
+            <Results />
+        )} />]
+        for (var i = 0; i < divisions.length; i++){
+            let divpath = "/roundup/" + divisions[i].split(" ").join("").toLowerCase()
+            let name = divisions[i]
+            routes.push(<Route key={i+1} path={divpath} render={(props) => (
+                        <Division name={name} />
+                    )}/>
+                )
+        }
+        return routes
+    }
+    
 
     render() {
+        let routes = this.buildRoutes(this.state.divisions)
         return (
             <div>
                 <h1>You are now logged in, {this.state.user.username}</h1>
                 <button onClick={this.logoutHandler}>Log out</button>
                     <div className="row">
-                        <Sidebar />
+                        <Sidebar divisions={this.state.divisions}/>
                         <Switch>
-                            <Route exact path="/roundup/" render={(props) => (
-                                <Results/>
-                            )}/>
-                            <Route path="/roundup/BestinShow" render={(props) => (
-                                <Division name="Best in Show" />
-                            )}/>
-                            <Route path="/roundup/ConcourseTrailered" render={(props) => (
-                                <Division name="Concourse Trailered" />
-                            )} />                            
-
+                            {routes}                        
                         </Switch>
                     </div>
             </div>

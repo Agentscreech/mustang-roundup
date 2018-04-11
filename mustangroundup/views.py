@@ -22,6 +22,30 @@ def index(request):
     # print("index firing")
     return render(request, 'index.html')
 
+def get_divisions(request):
+    print("getting divisions")
+    data = Division.objects.all()
+    names = []
+    for obj in data:
+        names.append(obj.name)
+    return JsonResponse(names, safe=False)
+
+def division(request, division):
+    data = Poll.objects.filter(
+        division_id=Division.objects.get(name=division).id
+    )
+    entries = []
+    for item in data:
+        obj = {}
+        entry = Car.objects.get(pk=item.car_id)
+        obj['name'] = entry.owner_name
+        obj['car'] = entry.car
+        obj['category'] = Category.objects.get(pk=item.category_id).name
+        obj['votes'] = item.votes
+        entries.append(obj)
+    
+    return JsonResponse(entries, safe=False)
+
 def test(request):
     data = Poll.objects.filter(
         division_id=Division.objects.get(name="Concourse Trailered").id)

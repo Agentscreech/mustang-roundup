@@ -19,6 +19,8 @@ urlpatterns += [
     path('admin/', admin.site.urls),
     path('obtain-auth-token/', csrf_exempt(obtain_auth_token)),
     path('test/', csrf_exempt(views.test), name="test"),
+    path('getDivisions/', views.get_divisions, name="get_divisions"),
+    path('division/<division>/', views.division, name="division"),
     re_path(r'^.*/$', views.index, name="index")
     # path('users/', UserViewSet)
 
