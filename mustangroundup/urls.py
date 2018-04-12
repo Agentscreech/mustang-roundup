@@ -21,6 +21,7 @@ urlpatterns += [
     path('test/', csrf_exempt(views.test), name="test"),
     path('getDivisions/', views.get_divisions, name="get_divisions"),
     path('division/<division>/', views.division, name="division"),
+    path('poll/<id>/', csrf_exempt(views.update_poll), name="update_poll"),
     re_path(r'^.*/$', views.index, name="index")
     # path('users/', UserViewSet)
 

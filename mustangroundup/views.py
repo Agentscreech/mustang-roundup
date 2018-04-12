@@ -42,9 +42,19 @@ def division(request, division):
         obj['car'] = entry.car
         obj['category'] = Category.objects.get(pk=item.category_id).name
         obj['votes'] = item.votes
+        obj['poll_id'] = item.id
         entries.append(obj)
     
     return JsonResponse(entries, safe=False)
+
+def update_poll(request, id):
+    try:
+        poll = Poll.objects.get(pk=id)
+        poll.votes += 1
+        poll.save()
+        return HttpResponse("poll updated")
+    except:
+        return HttpResponse("error happened")
 
 def test(request):
     data = Poll.objects.filter(

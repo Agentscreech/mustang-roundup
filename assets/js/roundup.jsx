@@ -111,14 +111,16 @@ class Roundup extends Component {
         return (
             <div>
                 <h1 className="text-center">You are now logged in, {this.state.user.username}</h1>
-                <div><button onClick={this.logoutHandler}>Log out</button></div>
+                <div className="row justify-content-end">
+                    <button className="btn btn-danger" onClick={this.logoutHandler}>Log out</button>
+                </div>
                 
-                    <div className="row">
-                        <Sidebar divisions={this.state.divisions}/>
-                        <Switch>
-                            {routes}                        
-                        </Switch>
-                    </div>
+                <div className="row">
+                    <Sidebar divisions={this.state.divisions}/>
+                    <Switch>
+                        {routes}                        
+                    </Switch>
+                </div>
             </div>
 
             

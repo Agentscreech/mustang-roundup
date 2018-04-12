@@ -6,14 +6,8 @@ import 'react-table/react-table.css'
 class Division extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            entries: [{
-                "car" : "",
-                "category" : "",
-                "name" : ""
-
-            }]
-        }
+        this.state = {}
+        this.handleVote = this.handleVote.bind(this)
     
     }
     componentDidMount() {
@@ -51,13 +45,43 @@ class Division extends Component {
         for (var i = 0; i < res.length; i++){
             let category = res[i].category
             if (category in temp){
-                temp[category].push({name:res[i].name, car:res[i].car, votes:res[i].votes})
+                temp[category].push({ name: res[i].name, car: res[i].car, votes: res[i].votes, voteButton: this.makeVoteButton(res[i].poll_id)})
             } else {
-                temp[category] = [{name:res[i].name, car:res[i].car, votes:res[i].votes}]
+                temp[category] = [{ name: res[i].name, car: res[i].car, votes: res[i].votes, voteButton: this.makeVoteButton(res[i].poll_id)}]
             }
 
         }
-        this.setState({entries: res, categories: temp})
+        this.setState({categories: temp})
+    }
+
+    makeVoteButton(id){
+        return (
+            <button onClick={this.handleVote} data_id={id} className="btn btn-success">Vote</button>
+        )
+    }
+
+    handleVote(e){
+        var id = e.target.getAttribute('data_id')
+        const params = {
+            'method': 'post',
+            'credentials': 'include',
+            'headers': new Headers({
+                // 'X-CSRFToken': csrftoken,
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                'X-Requested-With': 'XMLHttpRequest',
+                'Authorization': 'Token ' + localStorage.token
+            }),
+            // 'body': JSON.stringify({
+            //     username: username,
+            //     password: pass
+            // })
+
+        }
+        fetch('/poll/' + id+"/", params).then(function (res) {
+                // console.log('poll response res: ', res, this)
+                this.getDivision()
+        }.bind(this))
     }
 
     buildCategories(){
@@ -71,17 +95,23 @@ class Division extends Component {
         {
             Header: 'Votes',
             accessor: 'votes'
+        },
+        {
+            Header: 'Vote',
+            accessor:'voteButton'
         }]
         let elements = []
         for (var category in this.state.categories){
             elements.push(
-                <ReactTable
-                    data={this.state.categories[category]}
-                    columns={columns}
-                    showPagination = {false}
-                    defaultPageSize = {this.state.categories[category].length}
-                    key ={category}
-                />
+                <div key={category} className="text-center">
+                    {category}
+                    <ReactTable
+                        data={this.state.categories[category]}
+                        columns={columns}
+                        showPagination = {false}
+                        defaultPageSize = {this.state.categories[category].length}
+                    />
+                </div>
             )
         }
         return elements
