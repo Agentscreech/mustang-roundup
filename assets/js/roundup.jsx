@@ -21,10 +21,6 @@ class Roundup extends Component {
         this.goHome = this.goHome.bind(this)
     }
 
-    // getInitialState() {
-    //     return { 'user': [] }
-    // }
-
     componentDidMount() {
         this.loadUserData()
     }
@@ -33,10 +29,6 @@ class Roundup extends Component {
         this.getDivisions()
 
     }
-
-    // contextTypes: {
-    //     router: React.PropTypes.object.isRequired
-    // },
 
     logoutHandler() {
         auth.logout()
@@ -50,24 +42,17 @@ class Roundup extends Component {
     loadUserData(){
         const params = {
             'method': 'get',
-            // 'credentials': 'include',
             'headers': new Headers({
-                // 'X-CSRFToken': csrftoken,
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 'X-Requested-With': 'XMLHttpRequest',
                 'Authorization': 'Token ' + localStorage.token
             }),
-            // 'body': JSON.stringify({
-            //     username: username,
-            //     password: pass
-            // })
 
         }
         fetch('/users/i/',params).then(res => res.json())
         .then(function(res)
             {
-                // console.log('users response: ', res)
                 this.setState({ user: res })
             }.bind(this)
         )  
@@ -81,15 +66,10 @@ class Roundup extends Component {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Authorization': 'Token ' + localStorage.token
             }),
-            // 'body': JSON.stringify({
-            //     username: username,
-            //     password: pass
-            // })
 
         }
         fetch('/getDivisions/', params).then(res => res.json())
             .then(function (res) {
-                // console.log('division res: ', res)
                 this.setState({ divisions: res })
             }.bind(this)
             )  

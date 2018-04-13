@@ -18,14 +18,10 @@ urlpatterns += [
     path('', views.index, name="index"),
     path('admin/', admin.site.urls),
     path('obtain-auth-token/', csrf_exempt(obtain_auth_token)),
-    # path('test/', csrf_exempt(views.test), name="test"),
     path('getDivisions/', views.get_divisions, name="get_divisions"),
     path('division/<division>/', views.division, name="division"),
     path('poll/<id>/', csrf_exempt(views.update_poll), name="update_poll"),
     path('standings/', views.standings, name="standings"),
     re_path(r'^.*/$', views.index, name="index")
-    # path('users/', UserViewSet)
-
-    # path('api-auth/', include('rest_framework.urls'))
 
 ]

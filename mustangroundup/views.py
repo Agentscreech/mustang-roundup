@@ -22,21 +22,6 @@ def index(request):
     return render(request, 'index.html')
 
 def standings(request):
-    # response = [
-    #     [
-    #         [
-    #             {car.name, car.car}, {car.name, car.car}, {car.name, car.car}
-    #         ],
-    #         [
-    #             {car.name, car.car}, {car.name, car.car}, {car.name, car.car}
-    #         ]
-    #     ],
-    #     [
-    #         [{car.name, car.car}, {car.name, car.car}, {car.name, car.car}],
-    #         [{car.name, car.car}, {car.name, car.car}, {car.name, car.car}]
-    #     ]
-    # ]
-    
     
     divs, cats, entries = Division.objects.all(), Category.objects.all().order_by('name'), []
     
@@ -50,30 +35,6 @@ def standings(request):
                     b[c.name].append({"name":thing.car.owner_name, "car":thing.car.car})
                 a[d.name].append(b)
         entries.append(a)
-    print(entries)
-    # for d in divs:
-
-    #     for c in cats:
-
-    #         data = Poll.objects.filter(division=d, category=c).order_by('-votes')[:3]
-    #         for item in data:
-            #     if Division.objects.get(pk=item.division_id).name not in divs:
-            #         divs.append(Division.objects.get(pk=item.division_id.name))
-            #     if Category.objects.get(pk=item.category_id).name not in cats:
-            #         cats.append(Category.objects.get(pk=item.category_id).name)
-                # obj = {}
-                # entry = Car.objects.get(pk=item.car_id)
-                # obj['name'] = entry.owner_name
-                # obj['car'] = entry.car
-                # obj['category'] = Category.objects.get(pk=item.category_id).name
-                # obj['division'] = Division.objects.get(pk=item.division_id).name
-                # obj['votes'] = item.votes
-                # obj['poll_id'] = item.id
-                # entries.append(obj)
-
-    # for d in Division.objects.all():
-    #     for c in Category.objects.all():
-    #         ps = Poll.objects.filter(division=d, category=c).order_by('-votes')
     return JsonResponse({"entries":entries}, safe=False)
         
 

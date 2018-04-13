@@ -4,16 +4,10 @@ import { Link } from 'react-router-dom';
 class Sidebar extends Component {
     constructor(props) {
         super(props)
-        // this.state = {"links":[]}
         this.linkMaker = this.linkMaker.bind(this)
     }
 
-    // componentDidMount(){
-    //     this.setState({ "links": this.linkMaker(this.props.divisions)})
-    // }
-
     linkMaker(names){
-        // console.log(names)
         let links = []
         for (var i = 0; i < names.length; i++){
             let link = "/roundup/"+names[i].split(" ").join("").toLowerCase()

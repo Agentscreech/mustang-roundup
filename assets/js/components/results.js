@@ -15,7 +15,6 @@ class Results extends Component {
             'method': 'get',
             'credentials': 'include',
             'headers': new Headers({
-                // 'X-CSRFToken': csrftoken,
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 'X-Requested-With': 'XMLHttpRequest',
@@ -24,8 +23,6 @@ class Results extends Component {
         }
         fetch('/standings/', params).then((res) => res.json())
         .then( function (res) {
-            console.log('standing response ', res)
-            // this.setState({"entries":res.entries})
             var entries = res.entries
             var divisions = []
             for (var i = 0; i < entries.length; i++){

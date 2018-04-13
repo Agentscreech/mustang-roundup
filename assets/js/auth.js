@@ -1,9 +1,5 @@
 module.exports = {
     login: function (username, pass, cb) {
-        // if (localStorage.token) {
-        //     if (cb) cb(true)
-        //     return
-        // }
         this.getToken(username, pass, (res) => {
             if (res.authenticated) {
                 localStorage.token = res.token
@@ -20,16 +16,13 @@ module.exports = {
     },
 
     loggedIn: function () {
-        // console.log(localStorage.token)
         return localStorage.token
     },
 
     getToken: function (username, pass, cb) {
         const params = {
             'method': 'post',
-            // 'credentials': 'include',
             'headers': new Headers({
-                // 'X-CSRFToken': csrftoken,
                 "Accept": "application/json",
                 "Content-Type": "application/json",
                 'X-Requested-With': 'XMLHttpRequest'
