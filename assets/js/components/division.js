@@ -37,21 +37,18 @@ class Division extends Component {
                 // this.setState({ entries: res })
                 this.findCategories(res)
             }.bind(this)
-            )
+            ).then(() => {
+                // this.setState({cats:this.buildCategories()})
+
+            })
     }
 
     findCategories(res){
         let temp = {}
-        for (var i = 0; i < res.length; i++){
-            let category = res[i].category
-            if (category in temp){
-                temp[category].push({ name: res[i].name, car: res[i].car, votes: res[i].votes, voteButton: this.makeVoteButton(res[i].poll_id)})
-            } else {
-                temp[category] = [{ name: res[i].name, car: res[i].car, votes: res[i].votes, voteButton: this.makeVoteButton(res[i].poll_id)}]
-            }
-
+        for (var i = 0; i < res[0].length; i++){
+            res[0][i]["voteButton"] = this.makeVoteButton(res[0][i].poll_id)
         }
-        this.setState({categories: temp})
+        this.setState({entries: res[0], categories:res[1]})
     }
 
     makeVoteButton(id){
@@ -62,6 +59,13 @@ class Division extends Component {
 
     handleVote(e){
         var id = e.target.getAttribute('data_id')
+        var entries = this.state.entries
+        entries.forEach(function(entry) {
+            if (entry.poll_id == id){
+                entry.votes++
+            }
+        });
+        this.setState({entries:entries})
         const params = {
             'method': 'post',
             'credentials': 'include',
@@ -80,11 +84,12 @@ class Division extends Component {
         }
         fetch('/poll/' + id+"/", params).then(function (res) {
                 // console.log('poll response res: ', res, this)
-                this.getDivision()
+                // this.getDivision()
         }.bind(this))
     }
 
     buildCategories(){
+        console.log(this.state.categories)
         const columns = [{
             Header: 'Name',
             accessor: 'name'
@@ -101,20 +106,42 @@ class Division extends Component {
             accessor:'voteButton'
         }]
         let elements = []
-        for (var category in this.state.categories){
-            elements.push(
-                <div key={category} className="text-center">
-                    {category}
-                    <ReactTable
-                        data={this.state.categories[category]}
-                        columns={columns}
-                        showPagination = {false}
-                        defaultPageSize = {this.state.categories[category].length}
-                    />
-                </div>
-            )
+        let _max = 0
+        if (Object.keys(this.state).length > 0){
+            for (var i = 0; i < this.state.categories.length; i++) {
+                var category = this.state.categories[i]
+                var entries = []
+                for (var j = 0; j < this.state.entries.length; j++) {
+                    if (this.state.entries[j].category == category) {
+                        entries.push(this.state.entries[j])
+                    }
+                }
+                if (entries.length > _max){
+                    _max = entries.length
+                }
+                elements.push(
+                    <div key={category} className="text-center">
+                        {category}
+                        <ReactTable
+                            data={entries}
+                            columns={columns}
+                            showPagination={false}
+                            defaultPageSize={_max}
+                            defaultSorted={[
+                                {
+                                    id: "votes",
+                                    desc: true
+                                }
+                            ]}
+                        />
+                    </div>
+                )
+            }
+            return elements
+        } else {
+            return ""
         }
-        return elements
+        
     }
 
 

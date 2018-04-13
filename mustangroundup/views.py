@@ -35,17 +35,20 @@ def division(request, division):
         division_id=Division.objects.get(name=division).id
     )
     entries = []
+    categories = []
     for item in data:
         obj = {}
         entry = Car.objects.get(pk=item.car_id)
         obj['name'] = entry.owner_name
         obj['car'] = entry.car
+        if Category.objects.get(pk=item.category_id).name not in categories:
+            categories.append(Category.objects.get(pk=item.category_id).name)
         obj['category'] = Category.objects.get(pk=item.category_id).name
         obj['votes'] = item.votes
         obj['poll_id'] = item.id
         entries.append(obj)
-    
-    return JsonResponse(entries, safe=False)
+
+    return JsonResponse([entries, sorted(categories)], safe=False)
 
 def update_poll(request, id):
     try:
@@ -56,23 +59,6 @@ def update_poll(request, id):
     except:
         return HttpResponse("error happened")
 
-def test(request):
-    data = Poll.objects.filter(
-        division_id=Division.objects.get(name="Concourse Trailered").id)
-    test = []
-    for item in data:
-        thing = {}
-        entry = Car.objects.get(pk=item.car_id)
-        thing['name'] = entry.owner_name
-        thing['car'] = entry.car
-        thing['category'] = Category.objects.get(pk=item.category_id).name
-        test.append(thing)
-    # parsed = serializers.serialize('json', test)
-    print("test function firing")
-    # test = Poll.objects.all()
-    print(test)
-    return JsonResponse(test, safe=False)
-    
 
 
 

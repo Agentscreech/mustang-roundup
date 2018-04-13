@@ -35,4 +35,4 @@ class Poll(models.Model):
 
     def __str__(self):
 
-        return self.car.owner_name + "'s " + self.car.car + " " + self.category.name
+        return self.division.name + " " + self.category.name + " " + self.car.owner_name + "'s " + self.car.car
