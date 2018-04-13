@@ -18,6 +18,7 @@ class Roundup extends Component {
         }
         this.loadUserData = this.loadUserData.bind(this)
         this.logoutHandler = this.logoutHandler.bind(this)
+        this.goHome = this.goHome.bind(this)
     }
 
     // getInitialState() {
@@ -40,6 +41,10 @@ class Roundup extends Component {
     logoutHandler() {
         auth.logout()
         this.props.history.replace('/login/')
+    }
+
+    goHome(){
+        this.props.history.replace('/')
     }
 
     loadUserData(){
@@ -109,9 +114,10 @@ class Roundup extends Component {
     render() {
         let routes = this.buildRoutes(this.state.divisions)
         return (
-            <div>
-                <h1 className="text-center">You are now logged in, {this.state.user.username}</h1>
-                <div className="row justify-content-end">
+            <div className="col-12">
+                <h1 className="text-center">You are logged in as {this.state.user.username}</h1>
+                <div className="row justify-content-between">
+                    <button className="btn btn-primary" onClick={this.goHome}>Home</button>
                     <button className="btn btn-danger" onClick={this.logoutHandler}>Log out</button>
                 </div>
                 

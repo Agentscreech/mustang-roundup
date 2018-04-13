@@ -18,8 +18,14 @@ class HomePage extends Component {
         }
         return (
             <div className="text-center">
-                <h1>THIS IS THE HOMEPAGE</h1>
-                    {button}
+                <div className="row">
+                    <div className="col">
+                        <img src="/static/img/logo.png"/>
+                    </div>
+                </div>
+                    <div className="col">
+                        {button}
+                    </div>
             </div>
         )
     }

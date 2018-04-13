@@ -89,7 +89,6 @@ class Division extends Component {
     }
 
     buildCategories(){
-        console.log(this.state.categories)
         const columns = [{
             Header: 'Name',
             accessor: 'name'
@@ -106,9 +105,9 @@ class Division extends Component {
             accessor:'voteButton'
         }]
         let elements = []
-        let _max = 0
         if (Object.keys(this.state).length > 0){
             for (var i = 0; i < this.state.categories.length; i++) {
+                let _max = 0
                 var category = this.state.categories[i]
                 var entries = []
                 for (var j = 0; j < this.state.entries.length; j++) {
