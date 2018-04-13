@@ -9,10 +9,6 @@ class Login extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    // contextTypes: {
-    //     router: React.PropTypes.object.isRequired
-    // },
-
     handleSubmit(e) {
         e.preventDefault()
         var username = this.refs.username.value
