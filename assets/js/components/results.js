@@ -67,6 +67,7 @@ class Results extends Component {
                         columns={columns}
                         showPagination={false}
                         defaultPageSize={_max}
+                        sortable={false}
                     />
                 </div>
             )
