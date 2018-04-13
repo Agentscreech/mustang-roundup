@@ -27,3 +27,4 @@ six==1.11.0
 traitlets==4.3.2
 wcwidth==0.1.7
 wrapt==1.10.11
+gunicorn==19.7.1
