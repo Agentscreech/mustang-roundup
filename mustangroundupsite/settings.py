@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["mustangroundup.herokuapp.com:","127.0.0.1:8000"]
+ALLOWED_HOSTS = ["mustangroundup.herokuapp.com:","127.0.0.1:8000", "localhost:8000", "localhost"]
 
 
 # Application definition
@@ -82,9 +82,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mustang-roundup',
         'HOST': 'localhost',
-        'PORT': '5433',
-        'USER': 'user',
-        'PASSWORD': os.environ.get('PG_PASSWORD')
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': None
     }
 }
 

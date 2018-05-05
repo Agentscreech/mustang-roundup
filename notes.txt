@@ -1,0 +1,14 @@
+on division/results
+
+    vote button -> submit
+
+    vote count -> editable field for total score
+
+keep vote and vote button on peoples choice
+
+add car entry numbers to division list
+
+add flag for results to render on main site
+
+
+make entry field unique on cars table

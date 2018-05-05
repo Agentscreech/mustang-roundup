@@ -5,6 +5,7 @@ from .serializers import UserSerializer
 from django.contrib.auth.models import User
 from .models import Poll, Division, Car, Category
 from django.http import JsonResponse, HttpResponse
+import json
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -61,14 +62,18 @@ def division(request, division):
         obj['category'] = Category.objects.get(pk=item.category_id).name
         obj['votes'] = item.votes
         obj['poll_id'] = item.id
+        obj['entry_number'] = entry.entry_number
         entries.append(obj)
 
     return JsonResponse([entries, sorted(categories)], safe=False)
 
 def update_poll(request, id):
+    print("updating", id)
+    body = json.loads(request.body)
+    print(body["points"])
     try:
         poll = Poll.objects.get(pk=id)
-        poll.votes += 1
+        poll.votes = int(body["points"])
         poll.save()
         return HttpResponse("poll updated")
     except:

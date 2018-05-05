@@ -6,12 +6,21 @@ import 'react-table/react-table.css'
 class Division extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {categories: ""}
         this.handleVote = this.handleVote.bind(this)
-    
+        this.handleChange = this.handleChange.bind(this)
     }
-    componentDidMount() {
+    componentWillMount() {
         this.getDivision()
+    }
+    handleChange(event){
+        console.log(event.target.id, event.target.value)
+        var id = event.target.id
+        var points = event.target.value
+        var obj = {}
+        obj[id] = points
+        console.log(obj)
+        this.setState(obj)
     }
 
     getDivision(){
@@ -25,47 +34,48 @@ class Division extends Component {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Authorization': 'Token ' + localStorage.token
             }),
-            // 'body': JSON.stringify({
-            //     username: username,
-            //     password: pass
-            // })
 
         }
         fetch('/division/'+this.props.name, params).then(res => res.json())
             .then(function (res) {
-                // console.log('division res: ', res)
-                // this.setState({ entries: res })
                 this.findCategories(res)
             }.bind(this)
-            ).then(() => {
-                // this.setState({cats:this.buildCategories()})
-
-            })
+            )
     }
 
     findCategories(res){
         let temp = {}
         for (var i = 0; i < res[0].length; i++){
+            var obj = {}
+            obj[res[0][i].poll_id] = res[0][i].votes.toString()
+            this.setState(obj)
             res[0][i]["voteButton"] = this.makeVoteButton(res[0][i].poll_id)
+            res[0][i]["points"] = this.makeInputfield(res[0][i])
         }
         this.setState({entries: res[0], categories:res[1]})
     }
 
+    makeInputfield(entry){
+        return (
+            <input className="text-center" type="number" defaultValue={entry.votes} id={entry.poll_id} key={entry.id} />
+        )
+    }
+
     makeVoteButton(id){
         return (
-            <button onClick={this.handleVote} data_id={id} className="btn btn-success">Vote</button>
+            <button onClick={this.handleVote} data_id={id} className="btn btn-success">Submit</button>
         )
     }
 
     handleVote(e){
         var id = e.target.getAttribute('data_id')
-        var entries = this.state.entries
-        entries.forEach(function(entry) {
-            if (entry.poll_id == id){
-                entry.votes++
-            }
-        });
-        this.setState({entries:entries})
+        var points = document.getElementById(id).value
+        // entries.forEach(function(entry) {
+        //     if (entry.poll_id == id){
+        //         entry.votes++
+        //     }
+        // });
+        // this.setState({entries:entries})
         const params = {
             'method': 'post',
             'credentials': 'include',
@@ -76,10 +86,9 @@ class Division extends Component {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Authorization': 'Token ' + localStorage.token
             }),
-            // 'body': JSON.stringify({
-            //     username: username,
-            //     password: pass
-            // })
+            'body': JSON.stringify({
+                points: points,
+            })
 
         }
         fetch('/poll/' + id+"/", params).then(function (res) {
@@ -97,15 +106,15 @@ class Division extends Component {
             accessor: 'car',
         },
         {
-            Header: 'Votes',
-            accessor: 'votes'
+            Header: 'Points',
+            accessor: 'points'
         },
         {
-            Header: 'Vote',
+            Header: 'Submit Points',
             accessor:'voteButton'
         }]
         let elements = []
-        if (Object.keys(this.state).length > 0){
+        if (Object.keys(this.state.categories).length > 0){
             for (var i = 0; i < this.state.categories.length; i++) {
                 let _max = 0
                 var category = this.state.categories[i]
