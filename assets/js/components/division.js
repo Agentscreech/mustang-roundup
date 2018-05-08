@@ -49,8 +49,13 @@ class Division extends Component {
             var obj = {}
             obj[res[0][i].poll_id] = res[0][i].votes.toString()
             this.setState(obj)
-            res[0][i]["voteButton"] = this.makeVoteButton(res[0][i].poll_id)
-            res[0][i]["points"] = this.makeInputfield(res[0][i])
+            if (this.props.name == "People's Choice"){
+                res[0][i]["voteButton"] = this.makeVoteButton(res[0][i].poll_id, "Vote")
+                res[0][i]['points'] = res[0][i]['votes']
+            } else {
+                res[0][i]["voteButton"] = this.makeVoteButton(res[0][i].poll_id, "Submit")
+                res[0][i]["points"] = this.makeInputfield(res[0][i])
+            }
         }
         this.setState({entries: res[0], categories:res[1]})
     }
@@ -61,21 +66,29 @@ class Division extends Component {
         )
     }
 
-    makeVoteButton(id){
+    makeVoteButton(id, text){
         return (
-            <button onClick={this.handleVote} data_id={id} className="btn btn-success">Submit</button>
+            <button onClick={this.handleVote} data_id={id} className="btn btn-success">{text}</button>
         )
     }
 
     handleVote(e){
         var id = e.target.getAttribute('data_id')
-        var points = document.getElementById(id).value
-        // entries.forEach(function(entry) {
-        //     if (entry.poll_id == id){
-        //         entry.votes++
-        //     }
-        // });
-        // this.setState({entries:entries})
+        console.log(id)
+        if (this.props.name == "People's Choice"){
+            var entries = this.state.entries
+            var points;
+            entries.forEach(function (entry) {
+                if (entry.poll_id == id) {
+                    entry.points++
+                    points = entry.points
+                }
+            });
+            this.setState({ entries: entries })
+        } else {
+            var points = document.getElementById(id).value
+        }
+        
         const params = {
             'method': 'post',
             'credentials': 'include',
@@ -137,7 +150,7 @@ class Division extends Component {
                             defaultPageSize={_max}
                             defaultSorted={[
                                 {
-                                    id: "votes",
+                                    id: "points",
                                     desc: true
                                 }
                             ]}

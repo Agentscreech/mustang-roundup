@@ -5,7 +5,7 @@ from django.db import models
 class Car(models.Model):
     owner_name = models.CharField(max_length=200)
     car = models.CharField(max_length=200)
-    entry_number = models.IntegerField(default=0)
+    entry_number = models.IntegerField(default=0) #TODO: make unique
 
 
     def __str__(self):
