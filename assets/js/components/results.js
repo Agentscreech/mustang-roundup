@@ -36,6 +36,9 @@ class Results extends Component {
 
     buildCategories(divName, categories) {
         const columns = [{
+            Header: 'Number',
+            accessor: 'entry_number',
+        }, {
             Header: 'Name',
             accessor: 'name'
         }, {
@@ -80,7 +83,6 @@ class Results extends Component {
     render() {
 
         return <div className="col">
-                    <h4 className="text-center">Click on a division on the right to show cars entered in that division</h4>
                     {this.state.divs}
             </div>
 

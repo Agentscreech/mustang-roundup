@@ -112,6 +112,9 @@ class Division extends Component {
 
     buildCategories(){
         const columns = [{
+            Header: 'Number',
+            accessor: 'entry_number'
+        },{
             Header: 'Name',
             accessor: 'name'
         }, {

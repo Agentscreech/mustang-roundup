@@ -19,6 +19,8 @@ class Roundup extends Component {
         this.loadUserData = this.loadUserData.bind(this)
         this.logoutHandler = this.logoutHandler.bind(this)
         this.goHome = this.goHome.bind(this)
+        this.toggleLive = this.toggleLive.bind(this)
+        this.show_public = this.show_public.bind(this)
     }
 
     componentDidMount() {
@@ -27,6 +29,7 @@ class Roundup extends Component {
     
     componentWillMount(){
         this.getDivisions()
+        this.show_public()
 
     }
 
@@ -37,6 +40,27 @@ class Roundup extends Component {
 
     goHome(){
         this.props.history.replace('/')
+    }
+
+    show_public() {
+        const params = {
+            'method': 'get',
+            // 'credentials': 'include',
+            'headers': new Headers({
+                // 'X-CSRFToken': csrftoken,
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                'X-Requested-With': 'XMLHttpRequest',
+                'Authorization': 'Token ' + localStorage.token
+            }),
+
+        }
+        fetch('/show_public/', params)
+            .then(res => res.json())
+            .then(function (res) {
+                this.setState(res)
+            }
+                .bind(this))
     }
 
     loadUserData(){
@@ -90,14 +114,40 @@ class Roundup extends Component {
         return routes
     }
     
+    toggleLive(){
+        console.log(this.state)
+        const params = {
+            'method': 'post',
+            'headers': new Headers({
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                'X-Requested-With': 'XMLHttpRequest',
+                'Authorization': 'Token ' + localStorage.token
+            }),
+            'body': JSON.stringify({
+                toggle: !this.state.show
+            })
 
+        }
+        fetch('/toggle_show/', params).then(function(res){
+            this.setState({'show': !this.state.show})
+        }.bind(this))
+    }
     render() {
         let routes = this.buildRoutes(this.state.divisions)
+        if (this.state.show){
+            var toggle = <button className="btn btn-success" id="toggleButton" onClick={this.toggleLive}>Toggle Live Off</button>
+        } else {
+            var toggle = <button className="btn btn-success" id="toggleButton" onClick={this.toggleLive}>Toggle Live On</button>
+
+        }
+
         return (
             <div className="col-12">
-                <h1 className="text-center">You are logged in as {this.state.user.username}</h1>
+                <h4 className="text-center">You are logged in as {this.state.user.username}</h4>
                 <div className="row justify-content-between">
                     <button className="btn btn-primary" onClick={this.goHome}>Home</button>
+                    {toggle}
                     <button className="btn btn-danger" onClick={this.logoutHandler}>Log out</button>
                 </div>
                 

@@ -5,7 +5,7 @@ from django.db import models
 class Car(models.Model):
     owner_name = models.CharField(max_length=200)
     car = models.CharField(max_length=200)
-    entry_number = models.IntegerField(default=0) #TODO: make unique
+    entry_number = models.IntegerField(default=0, unique=True)
 
 
     def __str__(self):
@@ -36,3 +36,9 @@ class Poll(models.Model):
     def __str__(self):
 
         return self.division.name + " " + self.category.name + " " + self.car.owner_name + "'s " + self.car.car
+
+class Show_public(models.Model):
+    show = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.show)
