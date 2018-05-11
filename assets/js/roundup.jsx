@@ -144,7 +144,7 @@ class Roundup extends Component {
 
         return (
             <div className="col-12">
-                <h4 className="text-center">You are logged in as {this.state.user.username}</h4>
+                {/* <h4 className="text-center">You are logged in as {this.state.user.username}</h4> */}
                 <div className="row justify-content-between">
                     <button className="btn btn-primary" onClick={this.goHome}>Home</button>
                     {toggle}
