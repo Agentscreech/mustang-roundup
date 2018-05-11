@@ -72,12 +72,12 @@ class Results extends Component {
                 </div>
             )
         }
-        var thing = <div className="text-center">
+        var divName = <div className="text-center">
             <h3>{divName} Division</h3>
             {elements}
         </div>
-        console.log(thing)
-        return thing
+        // console.log(thing)
+        return divName
     }
 
     render() {

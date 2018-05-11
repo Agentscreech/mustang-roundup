@@ -51,7 +51,7 @@ class HomePage extends Component {
             <div className="text-center">
                 <div className="row">
                     <div className="col">
-                        <img src="/static/img/logo.png"/>
+                        <img src="/assets/img/logo.png"/>
                     </div>
                 </div>
                     <div className="col">

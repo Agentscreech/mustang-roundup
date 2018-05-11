@@ -5,7 +5,7 @@ module.exports = {
                 localStorage.token = res.token
                 if (cb) cb(res)
             } else {
-                console.log("login callback ", cb)
+                // console.log("login callback ", cb)
                 if (cb) cb(res)
             }
         })
@@ -37,11 +37,11 @@ module.exports = {
         fetch('/obtain-auth-token/', params)
         .then(res => res.json())
         .catch(error => {
-                console.log(error);
+                // console.log(error);
                 return cb({ authenticated: false })
         }) 
         .then(response => {
-            console.log(response);
+            // console.log(response);
             if (response.token){
                 return cb({
                     authenticated: true,

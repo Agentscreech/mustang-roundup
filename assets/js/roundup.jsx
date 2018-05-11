@@ -115,7 +115,7 @@ class Roundup extends Component {
     }
     
     toggleLive(){
-        console.log(this.state)
+        // console.log(this.state)
         const params = {
             'method': 'post',
             'headers': new Headers({

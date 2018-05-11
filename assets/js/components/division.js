@@ -14,12 +14,12 @@ class Division extends Component {
         this.getDivision()
     }
     handleChange(event){
-        console.log(event.target.id, event.target.value)
+        // console.log(event.target.id, event.target.value)
         var id = event.target.id
         var points = event.target.value
         var obj = {}
         obj[id] = points
-        console.log(obj)
+        // console.log(obj)
         this.setState(obj)
     }
 
@@ -74,7 +74,7 @@ class Division extends Component {
 
     handleVote(e){
         var id = e.target.getAttribute('data_id')
-        console.log(id)
+        // console.log(id)
         if (this.props.name == "People's Choice"){
             var entries = this.state.entries
             var points;

@@ -68,9 +68,9 @@ def division(request, division):
     return JsonResponse([entries, sorted(categories)], safe=False)
 
 def update_poll(request, id):
-    print("updating", id)
+    # print("updating", id)
     body = json.loads(request.body)
-    print(body["points"])
+    # print(body["points"])
     try:
         poll = Poll.objects.get(pk=id)
         poll.votes = int(body["points"])

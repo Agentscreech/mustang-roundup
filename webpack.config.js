@@ -2,22 +2,28 @@ var path = require('path')
 var webpack = require('webpack')
 var BundleTracker = require('webpack-bundle-tracker')
 
+const paths = {
+    ASSETS: path.resolve(__dirname, 'assets/bundles'),
+    JS: path.resolve(__dirname, 'assets/js')
+}
+
+
 module.exports = {
-    // context: __dirname,
-    entry : __dirname + '/assets/js/index',
+    context: __dirname,
+    entry : path.join(paths.JS, 'index.js'),
     output: {
-        path: __dirname +'/assets/bundles',
+        path: path.resolve(__dirname, 'assets/bundles'),
         filename: 'bundle.js',
     },
-    // plugins: [
-    //     new BundleTracker({ filename: './webpack-stats.json' }),
-    //     //makes jQuery available in every module
-    //     new webpack.ProvidePlugin({
-    //         $: 'jquery',
-    //         jQuery: 'jquery',
-    //         'window.jQuery': 'jquery'
-    //     })
-    // ], 
+    plugins: [
+        new BundleTracker({ filename: 'webpack-stats.json' }),
+        //makes jQuery available in every module
+        // new webpack.ProvidePlugin({
+        //     $: 'jquery',
+        //     jQuery: 'jquery',
+        //     'window.jQuery': 'jquery'
+        // })
+    ], 
 
     module: {
         rules: [
