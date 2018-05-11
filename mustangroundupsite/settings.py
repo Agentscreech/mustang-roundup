@@ -134,7 +134,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 STATICFILES_DIRS = (
     #This lets Django's collectstatic store our bundles
-    os.path.join(BASE_DIR, 'bundles'),
+    os.path.join(BASE_DIR, 'assets'),
 )
 
 WEBPACK_LOADER = {
