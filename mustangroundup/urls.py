@@ -8,13 +8,13 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from .views import UserViewSet
 
-router = DefaultRouter()
-router.register(r'users', UserViewSet)
-urlpatterns = router.urls
+# router = DefaultRouter()
+# router.register(r'users', UserViewSet)
+# urlpatterns = router.urls
 
 
 
-urlpatterns += [
+urlpatterns = [
     path('', views.index, name="index"),
     path('admin/', admin.site.urls),
     path('obtain-auth-token/', csrf_exempt(obtain_auth_token)),
