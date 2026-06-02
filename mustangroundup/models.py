@@ -85,6 +85,8 @@ class Category(models.Model):
     sort_order = models.PositiveIntegerField(default=0)
 
     class Meta:
+        verbose_name = "category"
+        verbose_name_plural = "categories"
         ordering = ["sort_order", "name"]
         constraints = [
             models.UniqueConstraint(
