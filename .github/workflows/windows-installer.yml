@@ -50,6 +50,22 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          $ErrorActionPreference = "Stop"
+
+          function Invoke-Gh {
+              param(
+                  [Parameter(ValueFromRemainingArguments = $true)]
+                  [string[]] $Arguments
+              )
+
+              & gh @Arguments
+              if ($LASTEXITCODE -ne 0) {
+                  throw "gh $($Arguments -join ' ') failed with exit code $LASTEXITCODE"
+              }
+          }
+
+          Invoke-Gh --version
+
           $tag = "${{ github.ref_name }}"
           if ("${{ github.event_name }}" -eq "workflow_dispatch") {
               $tag = "${{ inputs.release_tag }}"
@@ -65,8 +81,13 @@ jobs:
           "@
           $notes | Set-Content -Path release-notes.txt
 
-          if (gh release view $tag) {
-              gh release upload $tag "dist\installer\MustangRoundup-Setup.exe" --clobber
+          & gh release view $tag *> $null
+          $releaseExists = $LASTEXITCODE -eq 0
+
+          if ($releaseExists) {
+              Invoke-Gh release upload $tag "dist\installer\MustangRoundup-Setup.exe" --clobber
           } else {
-              gh release create $tag "dist\installer\MustangRoundup-Setup.exe" --target "${{ github.sha }}" --title "Mustang Roundup $tag" --notes-file release-notes.txt
+              Invoke-Gh release create $tag "dist\installer\MustangRoundup-Setup.exe" --target "${{ github.sha }}" --title "Mustang Roundup $tag" --notes-file release-notes.txt
           }
+
+          Invoke-Gh release view $tag --json tagName,url,assets
