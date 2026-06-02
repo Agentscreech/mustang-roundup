@@ -6,18 +6,22 @@ normal mobile browser. Internet access is not required during the event.
 
 ## Plain-English Setup
 
-The setup has three parts:
+For a non-technical show operator, the goal is this:
 
-1. Install Python on the Windows laptop.
-2. Run the setup script once.
-3. Run the start script on show day.
+1. Download `MustangRoundup-Setup.exe`.
+2. Double-click it.
+3. Use the `Mustang Roundup` desktop shortcut.
 
-After that, most setup is done in the browser.
+The installer is not code-signed, so Windows may show a SmartScreen warning.
+That is expected for a small unsigned app. The operator can click `More info`
+and then `Run anyway`.
+
+The older PowerShell setup path is still documented below as a fallback for
+developers or helpers.
 
 ## What You Need
 
 - A Windows 10 or Windows 11 laptop.
-- Python 3.12 installed on that laptop.
 - A Wi-Fi network that the laptop and judges' phones can all join.
 - A power outlet or battery plan for the laptop.
 - Printed judge PINs or a way to hand them to judges.
@@ -25,9 +29,61 @@ After that, most setup is done in the browser.
 A dedicated travel router is strongly recommended for an event. It is more
 reliable than depending on weak cell service or a laptop hotspot.
 
-## First-Time Windows Setup
+## Easiest Install For The Show Operator
+
+Use this section for the person running the show.
+
+### 1. Download The Installer
+
+Download:
+
+```text
+MustangRoundup-Setup.exe
+```
+
+Only download the installer from the project owner or the official GitHub
+release page.
+
+### 2. Run The Installer
+
+1. Double-click `MustangRoundup-Setup.exe`.
+2. If Windows shows a blue SmartScreen warning, click `More info`.
+3. Click `Run anyway`.
+4. Follow the installer prompts.
+5. Leave `Create a desktop shortcut` checked.
+
+The installer creates:
+
+- a Start Menu shortcut named `Mustang Roundup`;
+- a desktop shortcut named `Mustang Roundup`;
+- an app data folder for the event database.
+
+### 3. Start Mustang Roundup
+
+Double-click the `Mustang Roundup` desktop shortcut.
+
+A black server window opens. Keep that window open while the show is running.
+The app will also open the operator dashboard in the browser.
+
+On first run, the app asks you to create the administrator login. Write that
+username and password down.
+
+The server window prints judge links for phones on the same Wi-Fi, such as:
+
+```text
+http://192.168.50.10:8000/judge/login/
+```
+
+Use that link for judges. Do not give judges the `127.0.0.1` link.
+
+## Manual Windows Setup Fallback
+
+Use this section only if you do not have the installer.
 
 ### 1. Install Python
+
+The manual setup requires Python. The normal installer above does not require
+the operator to install Python separately.
 
 1. Go to https://www.python.org/downloads/
 2. Download Python 3.12 for Windows.
@@ -56,8 +112,7 @@ C:\MustangRoundup
 In PowerShell, run:
 
 ```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-.\scripts\setup-windows.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-windows.ps1
 ```
 
 The setup script will:
@@ -72,13 +127,16 @@ show.
 
 ## Starting The App
 
-Every time you want to run the app, open PowerShell in the app folder and run:
+If you installed with `MustangRoundup-Setup.exe`, use the desktop shortcut.
+
+If you are using the manual folder setup, open PowerShell in the app folder and
+run:
 
 ```powershell
-.\scripts\start-server.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\start-server.ps1
 ```
 
-Keep that PowerShell window open while the show is running. Closing it stops the
+Keep the server window open while the show is running. Closing it stops the
 server.
 
 The script prints links like these:
@@ -201,10 +259,12 @@ for the show.
 
 1. Turn on the travel router or event Wi-Fi.
 2. Connect the laptop to that Wi-Fi.
-3. Start the app:
+3. Start the app from the `Mustang Roundup` desktop shortcut.
+
+If you used the manual setup instead, run:
 
 ```powershell
-.\scripts\start-server.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\start-server.ps1
 ```
 
 4. Open the operator dashboard:
@@ -322,7 +382,7 @@ storage.
 
 ## Stopping The App
 
-Go to the PowerShell window running the server and press:
+Go to the black server window or PowerShell window running the server and press:
 
 ```text
 Ctrl+C
@@ -351,10 +411,13 @@ actual show.
 
 ### The Browser Says "127.0.0.1 Refused To Connect"
 
-The server is not running. Start it again:
+The server is not running. Start it again from the `Mustang Roundup` desktop
+shortcut.
+
+If you are using the manual setup, run:
 
 ```powershell
-.\scripts\start-server.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\start-server.ps1
 ```
 
 ### Judges Cannot Open The Link
@@ -371,6 +434,9 @@ Check these items:
 
 Choose `Allow access`. The app needs permission so phones on the local Wi-Fi can
 reach the laptop.
+
+If the installed app asks, the name may be `MustangRoundup.exe` instead of
+Python.
 
 ### I Forgot The Admin Password
 
@@ -392,7 +458,7 @@ Password: NewPassword123
 Restart the start script:
 
 ```powershell
-.\scripts\start-server.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\start-server.ps1
 ```
 
 Use the new judge link printed by the script.
@@ -428,3 +494,43 @@ The app is intentionally local-first:
 - phone-friendly judge forms;
 - local backup and CSV export;
 - small PWA shell for cached assets.
+
+## Building The One-File Windows Installer
+
+This section is for the project owner, not the show operator.
+
+The normal handoff artifact should be:
+
+```text
+MustangRoundup-Setup.exe
+```
+
+It is an unsigned installer. Without a paid code-signing certificate, Windows
+SmartScreen may warn the operator. That is expected. Tell the operator to use
+`More info` and `Run anyway`.
+
+### Build In GitHub
+
+Push this branch to GitHub. The workflow at:
+
+```text
+.github/workflows/windows-installer.yml
+```
+
+builds and uploads `MustangRoundup-Setup.exe` as a GitHub Actions artifact.
+
+### Build Locally On Windows
+
+Install Inno Setup 6, then run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\packaging\windows\build-installer.ps1
+```
+
+The installer is created at:
+
+```text
+dist\installer\MustangRoundup-Setup.exe
+```
+
+If Inno Setup is not installed, the script creates a portable zip instead.

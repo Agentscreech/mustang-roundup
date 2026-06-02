@@ -1,7 +1,16 @@
 import os
+import sys
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+if getattr(sys, "frozen", False):
+    BASE_DIR = Path(getattr(sys, "_MEIPASS"))
+    default_data_dir = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "MustangRoundup"
+else:
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    default_data_dir = BASE_DIR
+
+ROUNDUP_DATA_DIR = Path(os.environ.get("MUSTANGROUNDUP_DATA_DIR", default_data_dir))
+ROUNDUP_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
@@ -66,7 +75,7 @@ WSGI_APPLICATION = "mustangroundupsite.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.environ.get("SQLITE_PATH", BASE_DIR / "db.sqlite3"),
+        "NAME": os.environ.get("SQLITE_PATH", ROUNDUP_DATA_DIR / "db.sqlite3"),
     }
 }
 

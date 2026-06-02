@@ -394,7 +394,7 @@ def diagnostics(request):
         database_name = settings.DATABASES["default"]["NAME"]
         database_path = Path(database_name)
         if database_path.exists():
-            backup_dir = Path(settings.BASE_DIR) / "backups"
+            backup_dir = Path(settings.ROUNDUP_DATA_DIR) / "backups"
             backup_dir.mkdir(exist_ok=True)
             backup_path = backup_dir / f"mustang-roundup-{timezone.now():%Y%m%d-%H%M%S}.sqlite3"
             shutil.copy2(database_path, backup_path)
