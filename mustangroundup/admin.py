@@ -76,9 +76,9 @@ class JudgeAssignmentInline(admin.TabularInline):
 
 @admin.register(Judge)
 class JudgeAdmin(admin.ModelAdmin):
-    list_display = ("name", "show", "pin", "active", "last_seen_at")
+    list_display = ("name", "show", "active", "last_seen_at")
     list_filter = ("show", "active")
-    search_fields = ("name", "pin")
+    search_fields = ("name",)
     readonly_fields = ("token", "last_seen_at")
     inlines = [JudgeAssignmentInline]
 

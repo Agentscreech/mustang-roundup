@@ -61,6 +61,8 @@ def main():
     data_dir = app_data_dir()
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mustangroundupsite.settings")
     os.environ.setdefault("MUSTANGROUNDUP_DATA_DIR", str(data_dir))
+    os.environ.setdefault("MUSTANGROUNDUP_LOCAL_EVENT_MODE", "1")
+    os.environ.setdefault("DJANGO_DEBUG", "1")
 
     import django
     from django.core.management import call_command, execute_from_command_line

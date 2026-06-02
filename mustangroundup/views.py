@@ -8,13 +8,18 @@ from pathlib import Path
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.core.cache import cache
 from django.db.models import Q
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 from .models import Car, Category, Judge, Score, Show
+
+JUDGE_LOGIN_ATTEMPT_LIMIT = 5
+JUDGE_LOGIN_LOCKOUT_SECONDS = 5 * 60
 
 
 def active_show():
@@ -47,6 +52,25 @@ def current_judge(request):
     except Judge.DoesNotExist:
         request.session.flush()
         return None
+
+
+def judge_login_throttle_key(request, show):
+    remote_addr = request.META.get("REMOTE_ADDR", "unknown")
+    return f"judge-login:{show.id}:{remote_addr}"
+
+
+def judge_login_is_limited(request, show):
+    return cache.get(judge_login_throttle_key(request, show), 0) >= JUDGE_LOGIN_ATTEMPT_LIMIT
+
+
+def record_failed_judge_login(request, show):
+    key = judge_login_throttle_key(request, show)
+    attempts = cache.get(key, 0) + 1
+    cache.set(key, attempts, JUDGE_LOGIN_LOCKOUT_SECONDS)
+
+
+def clear_failed_judge_logins(request, show):
+    cache.delete(judge_login_throttle_key(request, show))
 
 
 def assigned_scope(judge):
@@ -150,13 +174,22 @@ def judge_login(request):
             messages.error(request, "Judging is not open yet.")
             return redirect("judge_login")
 
+        if judge_login_is_limited(request, show):
+            messages.error(
+                request,
+                "Too many judge PIN attempts. Wait a few minutes, then try again.",
+            )
+            return redirect("judge_login")
+
         pin = request.POST.get("pin", "").strip()
         try:
             judge = show.judges.get(pin=pin, active=True)
         except Judge.DoesNotExist:
-            messages.error(request, "That judge PIN was not found.")
+            record_failed_judge_login(request, show)
+            messages.error(request, "That judge PIN was not accepted.")
             return redirect("judge_login")
 
+        clear_failed_judge_logins(request, show)
         request.session["judge_id"] = judge.id
         request.session["judge_token"] = judge.token
         judge.mark_seen()
@@ -165,6 +198,7 @@ def judge_login(request):
     return render(request, "mustangroundup/judge_login.html", {"show": show})
 
 
+@require_POST
 def judge_logout(request):
     request.session.pop("judge_id", None)
     request.session.pop("judge_token", None)

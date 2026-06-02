@@ -9,7 +9,10 @@
       <h1>{{ judge.name }}</h1>
       <p>{{ show.name }} · {{ show.get_status_display }}</p>
     </div>
-    <a class="button" href="{% url 'judge_logout' %}">Sign Out</a>
+    <form method="post" action="{% url 'judge_logout' %}">
+      {% csrf_token %}
+      <button class="button" type="submit">Sign Out</button>
+    </form>
   </section>
 
   <section class="panel">

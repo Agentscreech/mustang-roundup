@@ -29,6 +29,36 @@ developers or helpers.
 A dedicated travel router is strongly recommended for an event. It is more
 reliable than depending on weak cell service or a laptop hotspot.
 
+## Public Or Internet Deployment Safety
+
+The Windows launcher and PowerShell start scripts are for a trusted local event
+network. They intentionally expose the judge pages on the laptop's Wi-Fi
+address so phones can connect.
+
+Do not expose the local `runserver` workflow directly to the internet. For a
+public hosted deployment, run behind HTTPS with a production web server and set
+these environment variables:
+
+```text
+MUSTANGROUNDUP_LOCAL_EVENT_MODE=0
+DJANGO_DEBUG=0
+DJANGO_SECRET_KEY=<long random secret>
+DJANGO_ALLOWED_HOSTS=<your-hostname>
+DJANGO_CSRF_TRUSTED_ORIGINS=https://<your-hostname>
+```
+
+If every subdomain for that hostname is HTTPS-only and you want HSTS preload
+eligibility, also set:
+
+```text
+DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=1
+DJANGO_SECURE_HSTS_PRELOAD=1
+```
+
+Use non-obvious judge PINs and change them between events. The app throttles
+repeated failed PIN attempts, but short or reused PINs are still weak on a
+public network.
+
 ## Easiest Install For The Show Operator
 
 Use this section for the person running the show.

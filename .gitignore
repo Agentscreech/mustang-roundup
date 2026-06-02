@@ -9,7 +9,6 @@ __pycache__/
 [Ll]ib
 [Ll]ib64
 [Ll]ocal
-[Ss]cripts
 pyvenv.cfg
 .venv
 pip-selfcheck.json
@@ -64,6 +63,7 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
+secret_key.txt
 db.sqlite3
 backups/
 
@@ -258,6 +258,7 @@ coverage.xml
 .static_storage/
 .media/
 local_settings.py
+secret_key.txt
 
 # Flask stuff:
 instance/

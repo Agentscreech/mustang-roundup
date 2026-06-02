@@ -53,7 +53,6 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>PIN</th>
             <th>Last Seen</th>
           </tr>
         </thead>
@@ -61,11 +60,10 @@
           {% for judge in recent_judges %}
             <tr>
               <td>{{ judge.name }}</td>
-              <td>{{ judge.pin }}</td>
               <td>{% if judge.last_seen_at %}{{ judge.last_seen_at|timesince }} ago{% else %}Never{% endif %}</td>
             </tr>
           {% empty %}
-            <tr><td colspan="3">No judges yet.</td></tr>
+            <tr><td colspan="2">No judges yet.</td></tr>
           {% endfor %}
         </tbody>
       </table>
