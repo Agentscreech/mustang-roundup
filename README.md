@@ -549,6 +549,34 @@ Push this branch to GitHub. The workflow at:
 
 builds and uploads `MustangRoundup-Setup.exe` as a GitHub Actions artifact.
 
+To put the installer in the GitHub Releases section, create and push a version
+tag:
+
+```powershell
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+GitHub Actions will build the Windows installer and attach this file to the
+release:
+
+```text
+MustangRoundup-Setup.exe
+```
+
+For the next public installer, use a new tag such as `v0.1.1`.
+
+You can also publish a release manually:
+
+1. Open the repository on GitHub.
+2. Go to `Actions`.
+3. Open `Build Windows Installer`.
+4. Click `Run workflow`.
+5. Enter a release tag such as `v0.1.0`.
+
+Do not commit the `.exe` file into the repo. Let GitHub Actions build it and
+place it on the release page.
+
 ### Build Locally On Windows
 
 Install Inno Setup 6, then run:

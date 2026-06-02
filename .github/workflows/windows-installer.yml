@@ -2,11 +2,21 @@ name: Build Windows Installer
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Optional release tag to publish, such as v0.1.0"
+        required: false
+        type: string
   push:
     branches:
       - main
       - master
       - codex/local-first-django-rebuild
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
 
 jobs:
   windows-installer:
@@ -33,3 +43,30 @@ jobs:
         with:
           name: MustangRoundup-Setup
           path: dist/installer/MustangRoundup-Setup.exe
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.release_tag != '')
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = "${{ github.ref_name }}"
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+              $tag = "${{ inputs.release_tag }}"
+          }
+          if ([string]::IsNullOrWhiteSpace($tag)) {
+              throw "Release tag is required."
+          }
+
+          $notes = @"
+          Unsigned Windows installer for Mustang Roundup.
+
+          Windows SmartScreen may show a warning because this app is not code-signed. Click More info, then Run anyway.
+          "@
+          $notes | Set-Content -Path release-notes.txt
+
+          if (gh release view $tag) {
+              gh release upload $tag "dist\installer\MustangRoundup-Setup.exe" --clobber
+          } else {
+              gh release create $tag "dist\installer\MustangRoundup-Setup.exe" --target "${{ github.sha }}" --title "Mustang Roundup $tag" --notes-file release-notes.txt
+          }
