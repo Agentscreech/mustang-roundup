@@ -1,29 +1,15 @@
-from django.urls import path, include, re_path
-from django.contrib import admin
+from django.urls import path
 from . import views
-# from django.conf.urls import url
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.routers import DefaultRouter
-from rest_framework.authtoken.views import obtain_auth_token
-
-from .views import UserViewSet
-
-# router = DefaultRouter()
-# router.register(r'users', UserViewSet)
-# urlpatterns = router.urls
-
-
 
 urlpatterns = [
-    path('', views.index, name="index"),
-    path('admin/', admin.site.urls),
-    path('obtain-auth-token/', csrf_exempt(obtain_auth_token)),
-    path('getDivisions/', views.get_divisions, name="get_divisions"),
-    path('division/<division>/', views.division, name="division"),
-    path('poll/<id>/', csrf_exempt(views.update_poll), name="update_poll"),
-    path('standings/', views.standings, name="standings"),
-    path('show_public/', views.show_public, name="show_public"),
-    path('toggle_show/', csrf_exempt(views.toggle_show), name="toggle_show"),
-    re_path(r'^.*/$', views.index, name="index")
-
+    path("", views.dashboard, name="dashboard"),
+    path("diagnostics/", views.diagnostics, name="diagnostics"),
+    path("judge/login/", views.judge_login, name="judge_login"),
+    path("judge/logout/", views.judge_logout, name="judge_logout"),
+    path("judge/", views.judge_dashboard, name="judge_dashboard"),
+    path("judge/car/<int:car_id>/", views.score_car, name="score_car"),
+    path("results/", views.results, name="results"),
+    path("results.csv", views.export_results_csv, name="export_results_csv"),
+    path("manifest.json", views.manifest, name="manifest"),
+    path("service-worker.js", views.service_worker, name="service_worker"),
 ]

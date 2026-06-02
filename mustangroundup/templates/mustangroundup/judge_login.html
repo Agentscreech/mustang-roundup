@@ -1,0 +1,24 @@
+{% extends "mustangroundup/base.html" %}
+
+{% block title %}Judge Login{% endblock %}
+
+{% block content %}
+  <section class="narrow">
+    <div class="page-header compact">
+      <div>
+        <p class="eyebrow">Judge Check-In</p>
+        <h1>{% if show %}{{ show.name }}{% else %}Mustang Roundup{% endif %}</h1>
+        {% if show %}
+          <p>{{ show.get_status_display }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <form method="post" class="panel form-stack">
+      {% csrf_token %}
+      <label for="pin">Judge PIN</label>
+      <input id="pin" name="pin" inputmode="numeric" autocomplete="one-time-code" required autofocus>
+      <button class="button primary full" type="submit">Start Judging</button>
+    </form>
+  </section>
+{% endblock %}

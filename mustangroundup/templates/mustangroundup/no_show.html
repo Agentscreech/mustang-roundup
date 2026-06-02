@@ -1,0 +1,17 @@
+{% extends "mustangroundup/base.html" %}
+
+{% block title %}No Show Configured{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Operator Dashboard</p>
+      <h1>No show configured</h1>
+    </div>
+    <a class="button primary" href="{% url 'admin:mustangroundup_show_add' %}">Create Show</a>
+  </section>
+
+  <section class="panel">
+    <p>Create the show first, then add divisions, classes, judging categories, cars, and judges from Django admin.</p>
+  </section>
+{% endblock %}

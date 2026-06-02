@@ -1,0 +1,85 @@
+{% extends "mustangroundup/base.html" %}
+
+{% block title %}Operator Dashboard{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Operator Dashboard</p>
+      <h1>{{ show.name }}</h1>
+      <p>{{ show.date }}{% if show.location %} · {{ show.location }}{% endif %}</p>
+    </div>
+    <div class="actions">
+      <a class="button" href="{% url 'admin:index' %}">Setup</a>
+      <a class="button" href="{% url 'export_results_csv' %}">Export CSV</a>
+    </div>
+  </section>
+
+  <section class="status-band">
+    <div>
+      <span class="label">Status</span>
+      <strong>{{ show.get_status_display }}</strong>
+    </div>
+    <div>
+      <span class="label">Public Results</span>
+      <strong>{% if show.public_standings %}Visible{% else %}Hidden{% endif %}</strong>
+    </div>
+    <form method="post" class="segmented">
+      {% csrf_token %}
+      <button name="action" value="setup">Setup</button>
+      <button name="action" value="open">Open</button>
+      <button name="action" value="closed">Close</button>
+      <button name="action" value="finalized">Finalize</button>
+      <button name="action" value="toggle_public">Toggle Results</button>
+    </form>
+  </section>
+
+  <section class="metric-grid" aria-label="Show metrics">
+    <div class="metric"><span>Cars</span><strong>{{ car_count }}</strong></div>
+    <div class="metric"><span>Judges</span><strong>{{ judge_count }}</strong></div>
+    <div class="metric"><span>Categories</span><strong>{{ category_count }}</strong></div>
+    <div class="metric"><span>Submitted</span><strong>{{ submitted_count }} / {{ expected_count }}</strong></div>
+    <div class="metric"><span>Drafts</span><strong>{{ draft_count }}</strong></div>
+    <div class="metric"><span>Missing</span><strong>{{ missing_count }}</strong></div>
+  </section>
+
+  <section class="two-column">
+    <div class="panel">
+      <div class="section-heading">
+        <h2>Judges</h2>
+        <a href="{% url 'admin:mustangroundup_judge_changelist' %}">Manage</a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>PIN</th>
+            <th>Last Seen</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for judge in recent_judges %}
+            <tr>
+              <td>{{ judge.name }}</td>
+              <td>{{ judge.pin }}</td>
+              <td>{% if judge.last_seen_at %}{{ judge.last_seen_at|timesince }} ago{% else %}Never{% endif %}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3">No judges yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div class="section-heading">
+        <h2>Event Links</h2>
+      </div>
+      <div class="link-list">
+        <a href="{% url 'judge_login' %}">Judge Login</a>
+        <a href="{% url 'results' %}">Results</a>
+        <a href="{% url 'diagnostics' %}">Local Network Diagnostics</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

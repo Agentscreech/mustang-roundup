@@ -1,0 +1,41 @@
+{% extends "mustangroundup/base.html" %}
+
+{% block title %}Score #{{ car.entry_number }}{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Scoring</p>
+      <h1>#{{ car.entry_number }} · {{ car.owner_name }}</h1>
+      <p>{{ car.display_vehicle }} · {{ car.car_class.name }}</p>
+    </div>
+    <a class="button" href="{% url 'judge_dashboard' %}">Back</a>
+  </section>
+
+  <form method="post" class="panel form-stack score-form">
+    {% csrf_token %}
+    {% for row in score_rows %}
+      <div class="score-row">
+        <label for="score_{{ row.category.id }}">
+          {{ row.category.name }}
+          <span>0-{{ row.category.max_score }}</span>
+        </label>
+        <input
+          id="score_{{ row.category.id }}"
+          name="score_{{ row.category.id }}"
+          type="number"
+          min="0"
+          max="{{ row.category.max_score }}"
+          step="1"
+          value="{% if row.score.value is not None %}{{ row.score.value }}{% endif %}"
+        >
+      </div>
+    {% empty %}
+      <p>No judging categories are assigned to this car.</p>
+    {% endfor %}
+    <div class="actions">
+      <button class="button" name="action" value="draft" type="submit">Save Draft</button>
+      <button class="button primary" name="action" value="submit" type="submit">Submit Final</button>
+    </div>
+  </form>
+{% endblock %}

@@ -2,7 +2,5 @@ from django.apps import AppConfig
 
 
 class MustangroundupConfig(AppConfig):
-    name = 'mustangroundup'
-
-    def ready(self):
-        from . import signals
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "mustangroundup"

@@ -1,0 +1,48 @@
+{% extends "mustangroundup/base.html" %}
+
+{% block title %}Judge Dashboard{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Judge Workspace</p>
+      <h1>{{ judge.name }}</h1>
+      <p>{{ show.name }} · {{ show.get_status_display }}</p>
+    </div>
+    <a class="button" href="{% url 'judge_logout' %}">Sign Out</a>
+  </section>
+
+  <section class="panel">
+    <div class="section-heading">
+      <h2>Assigned Categories</h2>
+    </div>
+    <div class="pill-row">
+      {% for category in categories %}
+        <span class="pill">{{ category.name }} · {{ category.max_score }} pts</span>
+      {% empty %}
+        <span class="pill warning">No categories assigned</span>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="list-stack">
+    {% for row in cars %}
+      <article class="item-card">
+        <div>
+          <span class="entry-number">#{{ row.car.entry_number }}</span>
+          <h2>{{ row.car.owner_name }}</h2>
+          <p>{{ row.car.display_vehicle }}</p>
+          <p>{{ row.car.car_class.division.name }} · {{ row.car.car_class.name }}</p>
+        </div>
+        <div class="item-actions">
+          <span class="status-pill">{{ row.status }}</span>
+          <a class="button primary" href="{% url 'score_car' row.car.id %}">Score</a>
+        </div>
+      </article>
+    {% empty %}
+      <section class="panel">
+        <p>No cars are assigned to you yet.</p>
+      </section>
+    {% endfor %}
+  </section>
+{% endblock %}

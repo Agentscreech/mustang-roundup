@@ -1,0 +1,43 @@
+{% extends "mustangroundup/base.html" %}
+
+{% block title %}Diagnostics{% endblock %}
+
+{% block content %}
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Local Network</p>
+      <h1>Diagnostics</h1>
+      <p>{% if show %}{{ show.name }}{% else %}No active show{% endif %}</p>
+    </div>
+    <form method="post">
+      {% csrf_token %}
+      <button class="button primary" name="action" value="backup" type="submit">Backup Database</button>
+    </form>
+  </section>
+
+  <section class="two-column">
+    <div class="panel">
+      <div class="section-heading">
+        <h2>Judge URL</h2>
+      </div>
+      <p class="copyable">{{ login_url }}</p>
+      {% if qr_code %}
+        <img class="qr" src="{{ qr_code }}" alt="QR code for judge login">
+      {% endif %}
+    </div>
+
+    <div class="panel">
+      <div class="section-heading">
+        <h2>Local Addresses</h2>
+      </div>
+      <div class="link-list">
+        {% for ip in ip_addresses %}
+          <a href="{{ request.scheme }}://{{ ip }}:{{ request.get_port }}{% url 'judge_login' %}">
+            {{ request.scheme }}://{{ ip }}:{{ request.get_port }}{% url 'judge_login' %}
+          </a>
+        {% endfor %}
+      </div>
+      <p class="muted">Database: {{ database_path }}</p>
+    </div>
+  </section>
+{% endblock %}
